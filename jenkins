@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+    environment {
+        name = "shailu"
+    }
+    parameters{
+    string(name: 'person',defaultValue: 'Shailu',description: "")
+    booleanParam(name: 'ismail', defaultValue: 'true',description: "")
+    choice(name: 'city',choices: ['Rishikesh','Dehradun','Pauri'],description: "")
+    }    
+    stages {
+        stage('test') {
+           environment {
+            name = "seema"
+           }
+            steps {
+                 sh 'echo  "${BUILD_ID}"'
+                 sh 'echo  "${name}"'
+                 }
+        }      
+        stage('build') {
+            steps {
+                 sh 'echo  "${BUILD_ID}"'
+                   sh 'echo  "${name}"'
+                 }
+        }
+        stage('Deploy') {
+            input {
+                message "Should we continue ?"
+                ok "yes"
+            }        
+            steps {
+                 echo "Deploy on prod"
+                 }
+        }
+    }
+        post { 
+        always { 
+            echo 'I will always say Hello again!'
+        }
+        success { 
+            echo 'job success!'
+        }
+        failure { 
+            echo 'job failed!'
+        }
+    }
+}
